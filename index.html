@@ -3,38 +3,139 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>TripCore | Travel Business OS</title>
+<meta name="theme-color" content="#08111f">
+<title>TripCore — Travel Business Management Platform</title>
+<script src="https://cdn.tailwindcss.com"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--navy:#08111f;--blue:#2563eb;--line:#e7edf5;--muted:#64748b}
-*{box-sizing:border-box}body{margin:0;background:#f6f8fc;color:#0f172a;font-family:Inter,system-ui,-apple-system,sans-serif}
-.sidebar{width:255px;position:fixed;inset:0 auto 0 0;background:var(--navy);color:#cbd5e1;padding:18px 12px;overflow:auto;z-index:20}
-.main{margin-left:255px}.topbar{height:68px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10}
-.side-item{display:flex;gap:10px;align-items:center;color:#9fb0c5;text-decoration:none;padding:10px 12px;border-radius:9px;margin:2px 0;font-size:14px}
-.side-item:hover,.side-item.active{background:#15253b;color:#fff}.content{padding:24px}
-.cardx,.stat{background:#fff;border:1px solid var(--line);border-radius:16px}.stat{padding:18px}.mini{font-size:12px;color:var(--muted)}.value{font-size:25px;font-weight:800}
-.table-wrap{overflow:auto}.table{min-width:700px}.empty{padding:45px 20px;text-align:center;color:var(--muted)}
-.mobile-menu{display:none}@media(max-width:991px){.sidebar{transform:translateX(-100%);transition:.2s}.sidebar.open{transform:none}.main{margin-left:0}.mobile-menu{display:inline-flex}.content{padding:16px}}
-.badge-soft{border-radius:999px;padding:5px 9px;font-size:11px;font-weight:700;background:#eff6ff;color:#1d4ed8}
-.hero{background:linear-gradient(135deg,#07101d,#0d1d32 60%,#0a2940);color:#fff;min-height:100vh}
-.hero .box{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.13);border-radius:22px}
+    :root{--navy:#08111f;--navy2:#0d1b2e;--blue:#2563eb;--cyan:#06b6d4;--green:#10b981;--gold:#f59e0b;--muted:#64748b;--line:#e7edf5}
+    *{box-sizing:border-box} body{margin:0;font-family:"DM Sans",sans-serif;background:#f6f8fc;color:#0f172a}
+    h1,h2,h3,h4,h5,.brand{font-family:"Plus Jakarta Sans",sans-serif}
+    .hero{background:radial-gradient(circle at 80% 10%,rgba(37,99,235,.35),transparent 28%),linear-gradient(135deg,#07101d,#0d1d32 58%,#0a2940);color:white;min-height:680px;position:relative;overflow:hidden}
+    .hero:after{content:"";position:absolute;width:520px;height:520px;border:1px solid rgba(255,255,255,.08);border-radius:50%;right:-170px;top:80px;box-shadow:0 0 0 70px rgba(255,255,255,.018),0 0 0 140px rgba(255,255,255,.012)}
+    .glass{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.13);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+    .hero-card{border-radius:24px;box-shadow:0 30px 80px rgba(0,0,0,.25)}
+    .nav-linkx{color:#cbd5e1;text-decoration:none;font-weight:600;font-size:.92rem}.nav-linkx:hover{color:#fff}
+    .btn-main{background:#fff;color:#0b1730;border:0;font-weight:800;padding:13px 20px;border-radius:12px}.btn-main:hover{background:#e8f0ff}
+    .btn-outline-lightx{border:1px solid rgba(255,255,255,.22);color:white;padding:12px 20px;border-radius:12px;font-weight:700}
+    .section{padding:85px 0}.eyebrow{color:#2563eb;font-size:.78rem;letter-spacing:.14em;font-weight:800;text-transform:uppercase}
+    .service-card,.testimonial,.why-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:26px;height:100%;transition:.25s;box-shadow:0 8px 30px rgba(15,23,42,.04)}
+    .service-card:hover,.why-card:hover{transform:translateY(-5px);box-shadow:0 20px 45px rgba(15,23,42,.09)}
+    .icon{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;background:#eff6ff;color:#2563eb;font-size:22px}
+    .dashboard-shell{display:none;min-height:100vh;background:#f5f7fb}.sidebar{width:260px;background:#08111f;color:#cbd5e1;position:fixed;inset:0 auto 0 0;padding:22px 14px;z-index:20;overflow:auto}.dash-main{margin-left:260px}
+    .side-item{display:flex;align-items:center;gap:12px;padding:11px 13px;border-radius:10px;color:#9fb0c5;text-decoration:none;margin:3px 0;font-size:14px}.side-item:hover,.side-item.active{background:#15253b;color:white}
+    .topbar{height:72px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:10}
+    .stat{background:white;border:1px solid var(--line);border-radius:17px;padding:20px}.stat .value{font-size:27px;font-weight:800}.mini{font-size:12px;color:#64748b}
+    .panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px}.table-wrap{overflow:auto}.table{min-width:650px}.badge-soft{background:#ecfdf5;color:#047857;border-radius:999px;padding:5px 9px;font-size:11px;font-weight:700}
+    .mobile-nav{display:none}.menu-btn{display:none}
+    @media(max-width:991px){.hero{min-height:auto;padding-bottom:60px}.hero:after{display:none}.sidebar{transform:translateX(-100%);transition:.25s}.sidebar.open{transform:translateX(0)}.dash-main{margin-left:0}.menu-btn{display:inline-flex}.mobile-nav{display:block}.section{padding:65px 0}}
+    @media(max-width:576px){.hero{padding-bottom:35px}.hero h1{font-size:2.35rem!important}.topbar{padding:0 15px}.dash-content{padding:18px!important}.stat{padding:16px}.stat .value{font-size:22px}.service-card{padding:20px}}
+  
+/* Functional workspace compatibility */
+.main{margin-left:260px;background:#f5f7fb;min-height:100vh}
+.content{padding:24px}
+.cardx,.stat{background:#fff;border:1px solid var(--line);border-radius:16px}
+.empty{padding:45px 20px;text-align:center;color:var(--muted)}
+.mobile-menu{display:none}
+@media(max-width:991px){.main{margin-left:0}.mobile-menu{display:inline-flex}.content{padding:16px}}
 </style>
 </head>
 <body>
-<div id="landing" class="hero">
-<nav class="container py-4 d-flex justify-content-between align-items-center">
-<div class="fw-bold fs-4">Trip<span class="text-info">Core</span></div>
-<button class="btn btn-light fw-bold" onclick="openApp()">Open workspace</button>
-</nav>
-<div class="container py-5"><div class="row align-items-center min-vh-75">
-<div class="col-lg-7"><span class="badge rounded-pill bg-light text-dark mb-3">Travel business operating system</span>
-<h1 class="display-4 fw-bold">Run your travel business from one workspace.</h1>
-<p class="lead text-white-50">Manage customers, tour packages, bookings, invoices, expenses, accommodation, visa services, transport, staff and leads without relying on disconnected spreadsheets.</p>
-<button class="btn btn-info btn-lg fw-bold me-2" onclick="openApp()">Start workspace</button>
+<!-- PUBLIC SITE -->
+<div id="publicApp">
+  <section class="hero">
+    <nav class="container py-4 d-flex align-items-center justify-content-between position-relative" style="z-index:2">
+      <div class="brand fw-bold fs-4">Trip<span style="color:#38bdf8">Core</span></div>
+      <div class="d-none d-lg-flex gap-4">
+        <a class="nav-linkx" href="#services">Services</a><a class="nav-linkx" href="#packages">Packages</a>
+        <a class="nav-linkx" href="#why">Why TripCore</a><a class="nav-linkx" href="#testimonials">Reviews</a>
+      </div>
+      <button class="btn btn-main" onclick="showDashboard()">Business Login</button>
+    </nav>
+
+    <div class="container py-5 position-relative" style="z-index:2">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-7 py-lg-5">
+          <span class="badge rounded-pill glass px-3 py-2 mb-4">✦ Modern travel business management</span>
+          <h1 class="display-3 fw-bold lh-sm mb-4">Manage Trips. Customers. Bookings. Payments. <span style="color:#38bdf8">All in One Place.</span></h1>
+          <p class="lead text-white-50 mb-4" style="max-width:620px">A complete workspace for tour operators, travel agencies and destination businesses to sell packages, manage customers, track bookings and run daily operations.</p>
+          <div class="d-flex flex-wrap gap-3">
+            <button class="btn btn-main" onclick="document.getElementById('packages').scrollIntoView({behavior:'smooth'})">Book a Tour →</button>
+            <button class="btn btn-outline-lightx" onclick="showDashboard()">Explore Business Dashboard</button>
+          </div>
+          <div class="d-flex flex-wrap gap-4 mt-5 text-white-50 small"><span>✓ Bookings</span><span>✓ Payments</span><span>✓ Hotels</span><span>✓ Visa assistance</span></div>
+        </div>
+        <div class="col-lg-5">
+          <div class="glass hero-card p-3">
+            <div class="bg-white rounded-4 p-3 text-dark">
+              <div class="d-flex justify-content-between align-items-center mb-3"><strong>Business Overview</strong><span class="badge-soft">Live</span></div>
+              <div class="row g-2">
+                <div class="col-6"><div class="p-3 rounded-3 bg-light"><small class="text-secondary">Bookings</small><div class="fs-4 fw-bold">248</div><small class="text-success">↑ 18.4%</small></div></div>
+                <div class="col-6"><div class="p-3 rounded-3 bg-light"><small class="text-secondary">Revenue</small><div class="fs-4 fw-bold">₦8.42m</div><small class="text-success">↑ 12.8%</small></div></div>
+              </div>
+              <div class="mt-3 p-3 rounded-3" style="background:#0b1728;color:white">
+                <div class="d-flex justify-content-between small mb-3"><span>Revenue performance</span><span class="text-info">2026</span></div>
+                <div class="d-flex align-items-end gap-2" style="height:125px">
+                  <i style="height:35%" class="flex-fill bg-info rounded-top opacity-50"></i><i style="height:55%" class="flex-fill bg-info rounded-top opacity-60"></i><i style="height:43%" class="flex-fill bg-info rounded-top opacity-70"></i><i style="height:75%" class="flex-fill bg-info rounded-top opacity-75"></i><i style="height:62%" class="flex-fill bg-info rounded-top opacity-80"></i><i style="height:92%" class="flex-fill bg-info rounded-top"></i>
+                </div>
+              </div>
+              <div class="mt-3 small"><div class="d-flex justify-content-between py-2 border-bottom"><span>Dubai Escape</span><b>₦1.25m</b></div><div class="d-flex justify-content-between py-2"><span>Abuja Weekend</span><b>₦420k</b></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="services">
+    <div class="container">
+      <div class="text-center mb-5"><div class="eyebrow">Everything connected</div><h2 class="fw-bold mt-2">One platform for your travel operation</h2><p class="text-secondary mx-auto" style="max-width:650px">From the first lead to final payment, keep every travel service and customer interaction organized.</p></div>
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-4"><div class="service-card"><div class="icon">✈️</div><h5 class="mt-4">Flight & Travel Services</h5><p class="text-secondary mb-0">Organize flight requests, itineraries and travel service records from one workspace.</p></div></div>
+        <div class="col-md-6 col-lg-4"><div class="service-card"><div class="icon">🏨</div><h5 class="mt-4">Hotels & Accommodation</h5><p class="text-secondary mb-0">Track hotel options, room details, reservations and accommodation costs.</p></div></div>
+        <div class="col-md-6 col-lg-4"><div class="service-card"><div class="icon">🛂</div><h5 class="mt-4">Visa & Assistance</h5><p class="text-secondary mb-0">Manage visa applications, required documents, status and customer assistance.</p></div></div>
+        <div class="col-md-6 col-lg-4"><div class="service-card"><div class="icon">🗺️</div><h5 class="mt-4">Tour Packages</h5><p class="text-secondary mb-0">Build attractive packages with destinations, schedules, pricing and availability.</p></div></div>
+        <div class="col-md-6 col-lg-4"><div class="service-card"><div class="icon">🚐</div><h5 class="mt-4">Transport</h5><p class="text-secondary mb-0">Coordinate transfers, vehicles, drivers and transport assignments.</p></div></div>
+        <div class="col-md-6 col-lg-4"><div class="service-card"><div class="icon">📣</div><h5 class="mt-4">Marketing & Leads</h5><p class="text-secondary mb-0">Capture leads, track opportunities and turn inquiries into confirmed bookings.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section pt-0" id="packages">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-end mb-4"><div><div class="eyebrow">Featured experiences</div><h2 class="fw-bold mt-2 mb-0">Popular tour packages</h2></div><button class="btn btn-outline-primary" onclick="alert('Package catalogue opened in the full product version.')">View all</button></div>
+      <div class="row g-4">
+        <div class="col-md-4"><div class="service-card p-0 overflow-hidden"><div style="height:190px;background:linear-gradient(135deg,#0ea5e9,#0f172a);display:grid;place-items:center;font-size:65px">🏝️</div><div class="p-4"><small class="text-primary fw-bold">DUBAI · 5 DAYS</small><h5 class="mt-2">Dubai Premium Escape</h5><p class="text-secondary">Hotel, airport transfers, city tour and selected activities.</p><div class="fw-bold">From ₦1,250,000</div></div></div></div>
+        <div class="col-md-4"><div class="service-card p-0 overflow-hidden"><div style="height:190px;background:linear-gradient(135deg,#14b8a6,#052e2b);display:grid;place-items:center;font-size:65px">🌴</div><div class="p-4"><small class="text-primary fw-bold">ZANZIBAR · 6 DAYS</small><h5 class="mt-2">Zanzibar Discovery</h5><p class="text-secondary">Island experience with accommodation and curated tours.</p><div class="fw-bold">From ₦980,000</div></div></div></div>
+        <div class="col-md-4"><div class="service-card p-0 overflow-hidden"><div style="height:190px;background:linear-gradient(135deg,#f59e0b,#7c2d12);display:grid;place-items:center;font-size:65px">🏜️</div><div class="p-4"><small class="text-primary fw-bold">ABU DHABI · 4 DAYS</small><h5 class="mt-2">Abu Dhabi City Break</h5><p class="text-secondary">Premium city itinerary, hotel and airport transfers.</p><div class="fw-bold">From ₦760,000</div></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-white" id="why">
+    <div class="container"><div class="row align-items-center g-5"><div class="col-lg-5"><div class="eyebrow">Why the platform</div><h2 class="fw-bold mt-2">Built around how travel businesses actually work.</h2><p class="text-secondary">Replace scattered spreadsheets, chats and disconnected records with one operational system.</p></div><div class="col-lg-7"><div class="row g-3">
+      <div class="col-sm-6"><div class="why-card"><h6>📊 Business visibility</h6><p class="text-secondary small mb-0">See bookings, revenue, expenses and performance at a glance.</p></div></div>
+      <div class="col-sm-6"><div class="why-card"><h6>👥 Customer management</h6><p class="text-secondary small mb-0">Keep profiles, travel history, documents and communications together.</p></div></div>
+      <div class="col-sm-6"><div class="why-card"><h6>💳 Financial control</h6><p class="text-secondary small mb-0">Track invoices, payments, outstanding balances and expenses.</p></div></div>
+      <div class="col-sm-6"><div class="why-card"><h6>⚡ Operational workflow</h6><p class="text-secondary small mb-0">Assign staff and tasks while keeping every trip moving.</p></div></div>
+    </div></div></div></div>
+  </section>
+
+  <section class="section" id="testimonials">
+    <div class="container"><div class="text-center mb-5"><div class="eyebrow">Testimonials</div><h2 class="fw-bold mt-2">Designed to reduce operational stress</h2></div><div class="row g-4">
+      <div class="col-md-4"><div class="testimonial"><div class="mb-3">★★★★★</div><p>“The dashboard gives our team one clear view of bookings and customer requests. It feels much easier to manage.”</p><b>Amaka O.</b><div class="mini">Travel Consultant</div></div></div>
+      <div class="col-md-4"><div class="testimonial"><div class="mb-3">★★★★★</div><p>“Having packages, payments and expenses in the same system removes a lot of manual work.”</p><b>Yusuf M.</b><div class="mini">Tour Operator</div></div></div>
+      <div class="col-md-4"><div class="testimonial"><div class="mb-3">★★★★★</div><p>“The biggest value is visibility. I can quickly see what needs attention without checking multiple spreadsheets.”</p><b>Fatima A.</b><div class="mini">Agency Manager</div></div></div>
+    </div></div>
+  </section>
+
+  <section class="section" style="background:#08111f;color:white"><div class="container text-center"><h2 class="fw-bold">Ready to run your travel business smarter?</h2><p class="text-white-50">Start with your customers, packages and bookings — then grow into a complete travel operations system.</p><button class="btn btn-main mt-2" onclick="showDashboard()">Get Started →</button></div></section>
+  <footer class="py-4 bg-white border-top"><div class="container d-flex flex-wrap justify-content-between gap-2"><span class="fw-bold">TripCore</span><span class="text-secondary small">Travel Business Management Platform · Prototype 2026</span></div></footer>
 </div>
-<div class="col-lg-5 mt-5 mt-lg-0"><div class="box p-4"><h5>Start with your real business data</h5><p class="text-white-50">TripCore starts empty. Create records as you work. Nothing is pre-filled with fictional customers, bookings or revenue.</p><ul class="text-white-50"><li>Customer records</li><li>Packages and trips</li><li>Bookings and invoices</li><li>Operational tasks</li></ul></div></div>
-</div></div>
-</div>
+
 
 <div id="app" style="display:none">
 <aside class="sidebar" id="sidebar">
@@ -64,6 +165,7 @@
 <div class="modal-footer"><button class="btn btn-primary" onclick="saveSettings()">Save settings</button></div>
 </div></div></div>
 
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 const KEY='tripcore.v1';
@@ -86,8 +188,9 @@ let state=load(), current='Overview', editingId=null;
 function load(){try{return JSON.parse(localStorage.getItem(KEY))||{settings:{businessName:''},records:{}}}catch{return {settings:{businessName:''},records:{}}}}
 function persist(){localStorage.setItem(KEY,JSON.stringify(state))}
 function id(){return crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2)}
-function openApp(){document.getElementById('landing').style.display='none';document.getElementById('app').style.display='block';renderNav();render('Overview')}
-function showLanding(){document.getElementById('app').style.display='none';document.getElementById('landing').style.display='block'}
+function openApp(){document.getElementById('publicApp').style.display='none';document.getElementById('app').style.display='block';renderNav();render('Overview')}
+function showLanding(){document.getElementById('app').style.display='none';document.getElementById('publicApp').style.display='block';window.scrollTo({top:0,behavior:'smooth'})}
+function showDashboard(){openApp()}
 function toggleSide(){document.getElementById('sidebar').classList.toggle('open')}
 function renderNav(){document.getElementById('nav').innerHTML=['Overview',...Object.keys(modules),'Settings'].map(n=>`<a href="#" class="side-item ${n===current?'active':''}" onclick="render('${esc(n)}');return false">${n==='Overview'?'📊':n==='Settings'?'⚙️':modules[n].icon} <span>${esc(n)}</span></a>`).join('')}
 function render(name){current=name;document.getElementById('pageTitle').textContent=name;document.getElementById('workspaceLabel').textContent=state.settings.businessName||'Your workspace';renderNav();if(name==='Overview')renderOverview();else if(name==='Settings')openSettings();else renderModule(name);if(innerWidth<992)document.getElementById('sidebar').classList.remove('open')}
@@ -120,4 +223,5 @@ function display(v,type){if(v===undefined||v==='')return '<span class="text-seco
 function singular(n){return n.replace(' & Invoices','').replace(' / Accommodation','').replace(' & Tasks','').replace(' / Leads','').replace(/s$/,'')}
 function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
 </script>
+
 </body></html>
