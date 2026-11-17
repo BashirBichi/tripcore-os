@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TripCore | Travel Business OS</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+:root{--navy:#08111f;--blue:#2563eb;--line:#e7edf5;--muted:#64748b}
+*{box-sizing:border-box}body{margin:0;background:#f6f8fc;color:#0f172a;font-family:Inter,system-ui,-apple-system,sans-serif}
+.sidebar{width:255px;position:fixed;inset:0 auto 0 0;background:var(--navy);color:#cbd5e1;padding:18px 12px;overflow:auto;z-index:20}
+.main{margin-left:255px}.topbar{height:68px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10}
+.side-item{display:flex;gap:10px;align-items:center;color:#9fb0c5;text-decoration:none;padding:10px 12px;border-radius:9px;margin:2px 0;font-size:14px}
+.side-item:hover,.side-item.active{background:#15253b;color:#fff}.content{padding:24px}
+.cardx,.stat{background:#fff;border:1px solid var(--line);border-radius:16px}.stat{padding:18px}.mini{font-size:12px;color:var(--muted)}.value{font-size:25px;font-weight:800}
+.table-wrap{overflow:auto}.table{min-width:700px}.empty{padding:45px 20px;text-align:center;color:var(--muted)}
+.mobile-menu{display:none}@media(max-width:991px){.sidebar{transform:translateX(-100%);transition:.2s}.sidebar.open{transform:none}.main{margin-left:0}.mobile-menu{display:inline-flex}.content{padding:16px}}
+.badge-soft{border-radius:999px;padding:5px 9px;font-size:11px;font-weight:700;background:#eff6ff;color:#1d4ed8}
+.hero{background:linear-gradient(135deg,#07101d,#0d1d32 60%,#0a2940);color:#fff;min-height:100vh}
+.hero .box{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.13);border-radius:22px}
+</style>
+</head>
+<body>
+<div id="landing" class="hero">
+<nav class="container py-4 d-flex justify-content-between align-items-center">
+<div class="fw-bold fs-4">Trip<span class="text-info">Core</span></div>
+<button class="btn btn-light fw-bold" onclick="openApp()">Open workspace</button>
+</nav>
+<div class="container py-5"><div class="row align-items-center min-vh-75">
+<div class="col-lg-7"><span class="badge rounded-pill bg-light text-dark mb-3">Travel business operating system</span>
+<h1 class="display-4 fw-bold">Run your travel business from one workspace.</h1>
+<p class="lead text-white-50">Manage customers, tour packages, bookings, invoices, expenses, accommodation, visa services, transport, staff and leads without relying on disconnected spreadsheets.</p>
+<button class="btn btn-info btn-lg fw-bold me-2" onclick="openApp()">Start workspace</button>
+</div>
+<div class="col-lg-5 mt-5 mt-lg-0"><div class="box p-4"><h5>Start with your real business data</h5><p class="text-white-50">TripCore starts empty. Create records as you work. Nothing is pre-filled with fictional customers, bookings or revenue.</p><ul class="text-white-50"><li>Customer records</li><li>Packages and trips</li><li>Bookings and invoices</li><li>Operational tasks</li></ul></div></div>
+</div></div>
+</div>
+
+<div id="app" style="display:none">
+<aside class="sidebar" id="sidebar">
+<div class="d-flex justify-content-between align-items-center px-2 mb-4"><div class="fw-bold fs-5 text-white">Trip<span class="text-info">Core</span></div><button class="btn btn-sm text-white d-lg-none" onclick="toggleSide()">✕</button></div>
+<div class="mini text-uppercase px-2 mb-2" style="color:#60738b">Workspace</div>
+<div id="nav"></div>
+<hr style="border-color:#22334a"><a class="side-item" href="#" onclick="showLanding()">← Public website</a>
+</aside>
+<main class="main">
+<header class="topbar d-flex justify-content-between align-items-center px-3 px-lg-4">
+<div class="d-flex align-items-center gap-3"><button class="btn btn-light mobile-menu" onclick="toggleSide()">☰</button><div><div class="fw-bold" id="pageTitle">Overview</div><div class="mini" id="workspaceLabel">Your workspace</div></div></div>
+<div class="d-flex gap-2"><button class="btn btn-light" onclick="openSettings()">⚙️</button></div>
+</header>
+<section class="content" id="content"></section>
+</main>
+</div>
+
+<div class="modal fade" id="recordModal" tabindex="-1"><div class="modal-dialog modal-lg modal-dialog-scrollable"><div class="modal-content">
+<div class="modal-header"><h5 class="modal-title" id="modalTitle">Add record</h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
+<div class="modal-body"><form id="recordForm"><div id="formFields" class="row g-3"></div></form></div>
+<div class="modal-footer"><button class="btn btn-light" data-bs-dismiss="modal">Cancel</button><button class="btn btn-primary" onclick="saveRecord()">Save</button></div>
+</div></div></div>
+
+<div class="modal fade" id="settingsModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content">
+<div class="modal-header"><h5 class="modal-title">Workspace settings</h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
+<div class="modal-body"><label class="form-label">Business name</label><input id="businessName" class="form-control" maxlength="120"><div class="form-text">Stored locally in this browser for the current prototype build.</div></div>
+<div class="modal-footer"><button class="btn btn-primary" onclick="saveSettings()">Save settings</button></div>
+</div></div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const KEY='tripcore.v1';
+const modules={
+Customers:{icon:'👥',fields:[['name','Full name','text',true],['phone','Phone','tel',true],['email','Email','email',false],['nationality','Nationality','text',false],['notes','Notes','textarea',false]]},
+'Trips & Tours':{icon:'✈️',fields:[['name','Trip name','text',true],['destination','Destination','text',true],['startDate','Start date','date',true],['endDate','End date','date',false],['status','Status','select:Planned,Active,Completed,Cancelled',true]]},
+'Tour Packages':{icon:'📦',fields:[['name','Package name','text',true],['destination','Destination','text',true],['duration','Duration','text',false],['price','Price (NGN)','number',true],['description','Description','textarea',false],['status','Status','select:Draft,Published,Archived',true]]},
+Bookings:{icon:'🗓️',fields:[['customer','Customer','text',true],['package','Package','text',true],['travelDate','Travel date','date',true],['amount','Amount (NGN)','number',true],['status','Status','select:Pending,Confirmed,Paid,Cancelled',true],['notes','Notes','textarea',false]]},
+'Payments & Invoices':{icon:'💳',fields:[['customer','Customer','text',true],['invoiceNo','Invoice number','text',true],['amount','Amount (NGN)','number',true],['dueDate','Due date','date',false],['status','Status','select:Draft,Sent,Paid,Overdue,Cancelled',true]]},
+Expenses:{icon:'🧾',fields:[['description','Description','text',true],['category','Category','text',true],['amount','Amount (NGN)','number',true],['date','Date','date',true],['status','Status','select:Pending,Approved,Paid,Rejected',true]]},
+'Hotels / Accommodation':{icon:'🏨',fields:[['hotel','Hotel','text',true],['customer','Customer','text',false],['checkIn','Check-in','date',true],['checkOut','Check-out','date',true],['rooms','Rooms','number',false],['status','Status','select:Inquiry,Reserved,Checked-in,Completed,Cancelled',true]]},
+'Visa & Travel Documents':{icon:'🛂',fields:[['customer','Customer','text',true],['country','Destination country','text',true],['document','Document / service','text',true],['status','Status','select:New,Documents requested,Submitted,Approved,Rejected,Completed',true],['dueDate','Due date','date',false]]},
+Transport:{icon:'🚐',fields:[['customer','Customer','text',false],['route','Route','text',true],['date','Service date','date',true],['vehicle','Vehicle','text',false],['driver','Driver','text',false],['status','Status','select:Requested,Assigned,In progress,Completed,Cancelled',true]]},
+'Staff & Tasks':{icon:'👨‍💼',fields:[['name','Staff / assignee','text',true],['task','Task','text',true],['dueDate','Due date','date',false],['priority','Priority','select:Low,Medium,High,Urgent',true],['status','Status','select:Open,In progress,Completed,Blocked',true]]},
+'Marketing / Leads':{icon:'📣',fields:[['name','Lead name','text',true],['contact','Contact','text',false],['source','Source','text',false],['interest','Interest','text',false],['status','Status','select:New,Contacted,Qualified,Won,Lost',true]]},
+Reports:{icon:'📈',fields:[['name','Report name','text',true],['period','Period','text',true],['type','Type','select:Revenue,Bookings,Customers,Expenses,Operations,Custom',true]]},
+Notifications:{icon:'🔔',fields:[['title','Notification','text',true],['message','Message','textarea',true],['status','Status','select:Unread,Read',true]]}
+};
+let state=load(), current='Overview', editingId=null;
+function load(){try{return JSON.parse(localStorage.getItem(KEY))||{settings:{businessName:''},records:{}}}catch{return {settings:{businessName:''},records:{}}}}
+function persist(){localStorage.setItem(KEY,JSON.stringify(state))}
+function id(){return crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2)}
+function openApp(){document.getElementById('landing').style.display='none';document.getElementById('app').style.display='block';renderNav();render('Overview')}
+function showLanding(){document.getElementById('app').style.display='none';document.getElementById('landing').style.display='block'}
+function toggleSide(){document.getElementById('sidebar').classList.toggle('open')}
+function renderNav(){document.getElementById('nav').innerHTML=['Overview',...Object.keys(modules),'Settings'].map(n=>`<a href="#" class="side-item ${n===current?'active':''}" onclick="render('${esc(n)}');return false">${n==='Overview'?'📊':n==='Settings'?'⚙️':modules[n].icon} <span>${esc(n)}</span></a>`).join('')}
+function render(name){current=name;document.getElementById('pageTitle').textContent=name;document.getElementById('workspaceLabel').textContent=state.settings.businessName||'Your workspace';renderNav();if(name==='Overview')renderOverview();else if(name==='Settings')openSettings();else renderModule(name);if(innerWidth<992)document.getElementById('sidebar').classList.remove('open')}
+function records(name){return state.records[name]||[]}
+function renderOverview(){
+const total=(n)=>records(n).length;
+const revenue=records('Payments & Invoices').filter(x=>x.status==='Paid').reduce((s,x)=>s+Number(x.amount||0),0);
+const outstanding=records('Payments & Invoices').filter(x=>['Sent','Overdue'].includes(x.status)).reduce((s,x)=>s+Number(x.amount||0),0);
+document.getElementById('content').innerHTML=`<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4"><div><h2 class="fw-bold mb-1">Business overview</h2><p class="text-secondary mb-0">Your workspace starts empty. Add records as you operate.</p></div><button class="btn btn-primary" onclick="render('Bookings')">＋ Create booking</button></div>
+<div class="row g-3 mb-4">${[['Customers',total('Customers'),'Active customers'],['Bookings',total('Bookings'),'Bookings'],['Payments & Invoices',money(revenue),'Revenue collected'],['Payments & Invoices',money(outstanding),'Outstanding invoices']].map(x=>`<div class="col-sm-6 col-xl-3"><div class="stat"><div class="mini">${x[2]}</div><div class="value">${x[1]}</div><div class="mini mt-1">${x[0]==='Payments & Invoices'?'Calculated from your records':'Records created'}</div></div></div>`).join('')}</div>
+<div class="row g-4"><div class="col-xl-8"><div class="cardx p-4"><h5 class="fw-bold">Getting started</h5><div class="row g-3 mt-1">${['Customers','Tour Packages','Bookings','Payments & Invoices','Expenses','Marketing / Leads'].map(n=>`<div class="col-md-6"><button class="btn btn-light w-100 text-start p-3" onclick="render('${n}')">${modules[n].icon} <b>${n}</b><br><span class="mini">Create and manage records</span></button></div>`).join('')}</div></div></div>
+<div class="col-xl-4"><div class="cardx p-4 h-100"><h5 class="fw-bold">Workspace status</h5><p class="text-secondary">No demo records are loaded.</p><div class="d-flex justify-content-between py-2 border-bottom"><span>Customers</span><b>${total('Customers')}</b></div><div class="d-flex justify-content-between py-2 border-bottom"><span>Bookings</span><b>${total('Bookings')}</b></div><div class="d-flex justify-content-between py-2"><span>Packages</span><b>${total('Tour Packages')}</b></div></div></div></div>`;
+}
+function renderModule(name){
+const m=modules[name], rs=records(name);
+document.getElementById('content').innerHTML=`<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4"><div><h2 class="fw-bold mb-1">${m.icon} ${esc(name)}</h2><p class="text-secondary mb-0">Create, edit and remove ${esc(name.toLowerCase())} records.</p></div><button class="btn btn-primary" onclick="openRecord('${esc(name)}')">＋ Add ${singular(name)}</button></div>
+<div class="cardx p-3"><div class="d-flex flex-wrap justify-content-between gap-2 mb-3"><input id="search" class="form-control" style="max-width:340px" placeholder="Search records..." oninput="filterTable('${esc(name)}')"><span class="mini align-self-center">${rs.length} record${rs.length===1?'':'s'}</span></div>
+${rs.length?`<div class="table-wrap"><table class="table align-middle"><thead><tr>${m.fields.slice(0,5).map(f=>`<th>${esc(f[1])}</th>`).join('')}<th>Actions</th></tr></thead><tbody id="rows">${rows(name,rs)}</tbody></table></div>`:`<div class="empty"><div class="fs-1">${m.icon}</div><h5>No ${esc(name.toLowerCase())} yet</h5><p>Create your first record to start using this module.</p><button class="btn btn-primary" onclick="openRecord('${esc(name)}')">＋ Add ${singular(name)}</button></div>`}</div>`;
+}
+function rows(name,rs){const m=modules[name];return rs.map(r=>`<tr data-search="${esc(JSON.stringify(r))}">${m.fields.slice(0,5).map(f=>`<td>${display(r[f[0]],f[2])}</td>`).join('')}<td class="text-nowrap"><button class="btn btn-sm btn-outline-primary me-1" onclick="openRecord('${esc(name)}','${r.id}')">Edit</button><button class="btn btn-sm btn-outline-danger" onclick="removeRecord('${esc(name)}','${r.id}')">Delete</button></td></tr>`).join('')}
+function filterTable(name){const q=(document.getElementById('search')?.value||'').toLowerCase();document.querySelectorAll('#rows tr').forEach(tr=>tr.style.display=tr.dataset.search.toLowerCase().includes(q)?'':'none')}
+function openRecord(name,recordId=''){editingId=recordId||null;const m=modules[name], r=records(name).find(x=>x.id===recordId)||{};document.getElementById('modalTitle').textContent=(recordId?'Edit ':'Add ')+singular(name);document.getElementById('formFields').innerHTML=m.fields.map(([key,label,type,required])=>`<div class="${type==='textarea'?'col-12':'col-md-6'}"><label class="form-label">${esc(label)}</label>${inputHtml(key,label,type,r[key]??'',required)}</div>`).join('');document.getElementById('recordForm').dataset.module=name;new bootstrap.Modal('#recordModal').show()}
+function inputHtml(key,label,type,value,required){const req=required?'required':'';if(type==='textarea')return `<textarea class="form-control" name="${key}" ${req} rows="3">${esc(value)}</textarea>`;if(type.startsWith('select:'))return `<select class="form-select" name="${key}" ${req}><option value="">Select...</option>${type.slice(7).split(',').map(v=>`<option ${v===value?'selected':''}>${v}</option>`).join('')}</select>`;return `<input class="form-control" name="${key}" type="${type}" value="${esc(value)}" ${req}>`}
+function saveRecord(){const form=document.getElementById('recordForm'),name=form.dataset.module;if(!form.reportValidity())return;const data={};modules[name].fields.forEach(([key])=>data[key]=form.elements[key].value.trim());data.id=editingId||id();data.updatedAt=new Date().toISOString();if(!state.records[name])state.records[name]=[];const i=state.records[name].findIndex(x=>x.id===data.id);if(i>=0)state.records[name][i]=data;else state.records[name].unshift(data);persist();bootstrap.Modal.getInstance(document.getElementById('recordModal')).hide();render(name)}
+function removeRecord(name,recordId){if(!confirm('Delete this record? This cannot be undone.'))return;state.records[name]=records(name).filter(x=>x.id!==recordId);persist();render(name)}
+function openSettings(){document.getElementById('businessName').value=state.settings.businessName||'';new bootstrap.Modal('#settingsModal').show()}
+function saveSettings(){state.settings.businessName=document.getElementById('businessName').value.trim();persist();bootstrap.Modal.getInstance(document.getElementById('settingsModal')).hide();render(current)}
+function money(v){return new Intl.NumberFormat('en-NG',{style:'currency',currency:'NGN',maximumFractionDigits:0}).format(v||0)}
+function display(v,type){if(v===undefined||v==='')return '<span class="text-secondary">-</span>';if(type==='number')return money(Number(v));return esc(String(v))}
+function singular(n){return n.replace(' & Invoices','').replace(' / Accommodation','').replace(' & Tasks','').replace(' / Leads','').replace(/s$/,'')}
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
+</script>
+</body></html>
